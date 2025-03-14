@@ -1,4 +1,5 @@
 import json
+import random  # 导入 random 模块
 from pkg.plugin.context import register, handler, llm_func, BasePlugin, APIHost, EventContext
 from pkg.plugin.events import *  # 导入事件类
 from pkg.platform.types import *
@@ -32,15 +33,16 @@ class KeywordTriggerPlugin(BasePlugin):
                 # 构建要发送的消息
                 message = [
                     At(target=sender_id),  # At发送者
-                    "\n",
-                    response["message"],  # 回复消息
-                    "\n"
+                    response["description"],  # 回复消息
                 ]
                 # 添加图片
-                if response["image_url"]:
-                    message.append(Image(url=response["image_url"]))
+                if response["urls"]:
+                    # 随机选择一个图片URL
+                    random_image_url = random.choice(response["urls"])
+                    message.append(Image(url="http://pic.aitung.top/i/2025/03/13/111oo25-0.jpg"))
 
                 # 发送消息
+                print(f'ctx.event.launcher_id={ctx.event.launcher_id}')
                 await ctx.send_message(ctx.event.launcher_type, str(ctx.event.launcher_id), MessageChain(message))
                 ctx.prevent_default()
                 ctx.prevent_postorder()

@@ -1,14 +1,25 @@
 {
-    "云服务器": {
-        "message": "\n云服务器9.9/年，只圈钱不跑路\n",
-        "image_url": "https://static.moontung.top/2024/202409021559544.jpg"
+    "卡布奇诺": {
+        "description": "卡不卡不小玫瑰",
+        "urls": [
+            "http://pic.aitung.top/i/2025/03/13/111oo25-0.jpg",
+            "http://pic.aitung.top/i/2025/03/13/111or0w-0.jpg",
+            "http://pic.aitung.top/i/2025/03/13/111p5p3-0.jpg"
+        ]
     },
-    "优惠活动": {
-        "message": "优惠活动开始了，快来抢购！\n5.9/年\n",
-        "image_url": "https://static.moontung.top/2024/202409021559544.jpg"
+    "卡布": {
+        "description": "卡不卡不小77发视",
+        "urls": [
+            "http://pic.aitung.top/i/2025/03/13/114m6x7-0.jpg",
+            "http://pic.aitung.top/i/2025/03/13/114mp2y-0.jpg",
+            "http://pic.aitung.top/i/2025/03/13/114n4rg-0.png",
+            "http://pic.aitung.top/i/2025/03/13/116i4en-0.jpg"
+        ]
     },
-    "客服": {
-        "message": "客服在线，欢迎咨询！",
-        "image_url": ""
+    "小玫瑰": {
+        "description": "玫瑰玫瑰",
+        "urls": [
+            "http://pic.aitung.top/i/2025/03/13/12h0jfr-0.png"
+        ]
     }
 }
