@@ -13,14 +13,16 @@ import os
 class KeywordTriggerPlugin(BasePlugin):
     # 插件加载时触发
     def __init__(self, host: APIHost):
-        pass
+        self.host = host
 
-    @handler(PersonMessageReceived)
+    # @handler(PersonMessageReceived)
     @handler(GroupMessageReceived)
     async def group_normal_message_received(self, ctx: EventContext):
         msg = str(ctx.event.message_chain).strip()
         sender_id = ctx.event.sender_id
-        # print(f'ys={ctx.event.message_event}')
+        print(f'msg={str(ctx.event.message_chain)}')
+        # print(f'ctx.event.launcher_id={ctx.event.launcher_id}')
+
         # 每次收到消息时加载 JSON 文件
         script_dir = os.path.dirname(os.path.abspath(__file__))
         file_path = os.path.join(script_dir, 'keyword_responses.json')
@@ -39,10 +41,10 @@ class KeywordTriggerPlugin(BasePlugin):
                 if response["urls"]:
                     # 随机选择一个图片URL
                     random_image_url = random.choice(response["urls"])
-                    message.append(Image(url="http://pic.aitung.top/i/2025/03/13/111oo25-0.jpg"))
+                    message.append(Image(url=str(random_image_url)))
 
                 # 发送消息
-                print(f'ctx.event.launcher_id={ctx.event.launcher_id}')
+                print(f'messchain={MessageChain(message)}')
                 await ctx.send_message(ctx.event.launcher_type, str(ctx.event.launcher_id), MessageChain(message))
                 ctx.prevent_default()
                 ctx.prevent_postorder()
