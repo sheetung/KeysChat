@@ -17,12 +17,12 @@ class KeywordTriggerPlugin(BasePlugin):
 
     # @handler(PersonMessageReceived)
     @handler(GroupMessageReceived)
+    # @handler(GroupNormalMessageReceived)
     async def group_normal_message_received(self, ctx: EventContext):
         msg = str(ctx.event.message_chain).strip()
         sender_id = ctx.event.sender_id
-        print(f'msg={str(ctx.event.message_chain)}')
         # print(f'ctx.event.launcher_id={ctx.event.launcher_id}')
-
+        print(f'sender_id={sender_id}')
         # 每次收到消息时加载 JSON 文件
         script_dir = os.path.dirname(os.path.abspath(__file__))
         file_path = os.path.join(script_dir, 'keyword_responses.json')
@@ -33,19 +33,26 @@ class KeywordTriggerPlugin(BasePlugin):
         for keyword, response in keyword_responses.items():
             if keyword in msg:
                 # 构建要发送的消息
-                message = [
+                messages = [
                     At(target=sender_id),  # At发送者
-                    response["description"],  # 回复消息
+                    # response["description"],  # 回复消息
+                    Plain(text=response["description"]),
                 ]
                 # 添加图片
                 if response["urls"]:
                     # 随机选择一个图片URL
                     random_image_url = random.choice(response["urls"])
-                    message.append(Image(url=str(random_image_url)))
+                    messages.append(Image(url=str(random_image_url)))
 
                 # 发送消息
-                print(f'messchain={MessageChain(message)}')
-                await ctx.send_message(ctx.event.launcher_type, str(ctx.event.launcher_id), MessageChain(message))
+                print(f'launcher = {ctx.event.launcher_type}')
+                await ctx.host.send_active_message(
+                            adapter=self.host.get_platform_adapters()[0],
+                            target_type=str(ctx.event.launcher_type),
+                            target_id=str(ctx.event.launcher_id),
+                            message=MessageChain(messages)
+                        )
+                # await ctx.send_message(ctx.event.launcher_type, str(ctx.event.launcher_id), MessageChain(message))
                 ctx.prevent_default()
                 ctx.prevent_postorder()
                 break  # 匹配到一个关键词后退出循环
