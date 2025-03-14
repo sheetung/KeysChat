@@ -3,6 +3,7 @@ import random  # 导入 random 模块
 from pkg.plugin.context import register, handler, llm_func, BasePlugin, APIHost, EventContext
 from pkg.plugin.events import *  # 导入事件类
 from pkg.platform.types import *
+import pkg.platform.types as platform_types
 import os
 
 # 注册插件
@@ -33,24 +34,24 @@ class KeywordTriggerPlugin(BasePlugin):
         for keyword, response in keyword_responses.items():
             if keyword in msg:
                 # 构建要发送的消息
-                messages = [
-                    At(target=sender_id),  # At发送者
-                    # response["description"],  # 回复消息
-                    Plain(text=response["description"]),
-                ]
+                messages = [platform_message.Plain(text=response["description"]),]
                 # 添加图片
                 if response["urls"]:
                     # 随机选择一个图片URL
                     random_image_url = random.choice(response["urls"])
-                    messages.append(Image(url=str(random_image_url)))
+                    messages.append(platform_message.Image(url=str(random_image_url)))
 
                 # 发送消息
                 print(f'launcher = {ctx.event.launcher_type}')
+                # 添加At
+                messages.insert(0,platform_message.At(sender_id))
+                print(f'msg={messages}')
+                print(f'msgC={platform_types.MessageChain(messages)}')
                 await ctx.host.send_active_message(
                             adapter=self.host.get_platform_adapters()[0],
                             target_type=str(ctx.event.launcher_type),
                             target_id=str(ctx.event.launcher_id),
-                            message=MessageChain(messages)
+                            message=platform_types.MessageChain(messages)
                         )
                 # await ctx.send_message(ctx.event.launcher_type, str(ctx.event.launcher_id), MessageChain(message))
                 ctx.prevent_default()
